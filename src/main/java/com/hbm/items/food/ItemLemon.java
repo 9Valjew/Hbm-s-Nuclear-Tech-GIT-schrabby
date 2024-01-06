@@ -5,6 +5,9 @@ import java.util.List;
 import com.hbm.items.ModItems;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.util.ContaminationUtil;
+import com.hbm.util.ContaminationUtil.ContaminationType;
+import com.hbm.util.ContaminationUtil.HazardType;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.entity.player.EntityPlayer;
@@ -97,6 +100,11 @@ public class ItemLemon extends ItemFood {
 		if(this == ModItems.quesadilla) {
 			list.add("That's what a 50 year old yeast infection does to you.");
 		}
+
+		if(this == ModItems.apple_plutonium) {
+			list.add("The forbidden fruit.");
+			list.add("Some may describe it as \"Sweet&Sour\"");
+		}
 	}
 
 
@@ -123,6 +131,12 @@ public class ItemLemon extends ItemFood {
 			player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 60 * 20, 1));
 			player.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 20 * 20, 2));
 		}
+
+		if(this == ModItems.apple_plutonium) {
+			player.addPotionEffect(new PotionEffect((Potion.resistance.id),300 * 20,4));
+			ContaminationUtil.contaminate(player,HazardType.RADIATION,ContaminationType.RAD_BYPASS,999);
+		}
+
     }
 
     public ItemStack onEaten(ItemStack stack, World worldObj, EntityPlayer player)
