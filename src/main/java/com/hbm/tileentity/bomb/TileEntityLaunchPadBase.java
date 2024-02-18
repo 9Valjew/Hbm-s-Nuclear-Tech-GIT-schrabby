@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Level;
 
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.missile.EntityMissileAntiBallistic;
+import com.hbm.entity.missile.EntityMissileAntiAir;
 import com.hbm.entity.missile.EntityMissileBaseNT;
 import com.hbm.entity.missile.EntityMissileDoomsday;
 import com.hbm.entity.missile.EntityMissileShuttle;
@@ -323,6 +324,13 @@ public abstract class TileEntityLaunchPadBase extends TileEntityMachineBase impl
 			missile.posZ = zCoord + 0.5D;
 			return missile;
 		}
+		if(slots[0].getItem() == ModItems.missile_anti_air) {
+			EntityMissileAntiAir missile = new EntityMissileAntiAir(worldObj);
+			missile.posX = xCoord + 0.5D;
+			missile.posY = yCoord + getLaunchOffset();
+			missile.posZ = zCoord + 0.5D;
+			return missile;
+		}
 		
 		return null;
 	}
@@ -376,6 +384,10 @@ public abstract class TileEntityLaunchPadBase extends TileEntityMachineBase impl
 				EntityMissileAntiBallistic abm = (EntityMissileAntiBallistic) e;
 				abm.tracking = entity;
 			}
+			if(e instanceof EntityMissileAntiAir) {
+				EntityMissileAntiAir aa = (EntityMissileAntiAir) e;
+				aa.tracking = entity;
+			}
 			
 			finalizeLaunch(e);
 			return BombReturnCode.LAUNCHED;
@@ -405,7 +417,7 @@ public abstract class TileEntityLaunchPadBase extends TileEntityMachineBase impl
 	}
 	
 	public boolean needsDesignator(Item item) {
-		return item != ModItems.missile_anti_ballistic;
+		return item != ModItems.missile_anti_ballistic && item != ModItems.missile_anti_air;
 	}
 	
 	/** Full launch condition, checks if the item is launchable, fuel and power are present and any additional checks based on launch pad type */

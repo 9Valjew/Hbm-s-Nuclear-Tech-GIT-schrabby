@@ -41,6 +41,7 @@ public class ItemMissile extends ItemCustomLore {
 	
 	public enum MissileFormFactor {
 		ABM(MissileFuel.SOLID),
+		SAM(MissileFuel.SOLID),
 		MICRO(MissileFuel.SOLID),
 		V2(MissileFuel.ETHANOL_PEROXIDE),
 		STRONG(MissileFuel.KEROSENE_PEROXIDE),

@@ -8,6 +8,7 @@ import com.hbm.entity.grenade.EntityGrenadeTau;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
 import com.hbm.entity.item.EntityFallingBlockNT;
 import com.hbm.entity.missile.EntityMissileAntiBallistic;
+import com.hbm.entity.missile.EntityMissileAntiAir;
 import com.hbm.entity.missile.EntityMissileBase;
 import com.hbm.entity.particle.EntityChlorineFX;
 import com.hbm.entity.particle.EntityCloudFX;
@@ -708,7 +709,7 @@ public class ExplosionChaos {
 					d5 /= d9;
 					d6 /= d9;
 					d7 /= d9;
-					if (entity instanceof EntityMissileBase && !(entity instanceof EntityMissileAntiBallistic)) {
+					if (entity instanceof EntityMissileBase && !(entity instanceof EntityMissileAntiBallistic || entity instanceof EntityMissileAntiAir)) {
 						return entity;
 					}
 				}

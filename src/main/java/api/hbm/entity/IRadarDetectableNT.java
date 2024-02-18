@@ -17,6 +17,7 @@ public interface IRadarDetectableNT {
 	public static final int ARTY =		12;
 	/** Reserved type that shows a unique purple blip. Used for when nothing else applies. */
 	public static final int SPECIAL =	13;
+	public static final int TIER_SAM = 	14;
 
 	/** Name use for radar display, uses I18n for lookup */
 	public String getUnlocalizedName();

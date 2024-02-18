@@ -15,6 +15,7 @@ public interface IRadarDetectable {
 		MISSILE_15_20("Size 15/20 Custom Missile"),	//size 15/20 custom missiles
 		MISSILE_20("Size 20 Custom Missile"),		//size 20 custom missiles
 		MISSILE_AB("Anti-Ballistic Missile"),		//anti ballistic missile
+		MISSILE_SAM("Surface-to-Air Missile"),		//surface to air missile
 		PLAYER("Player"),							//airborne players
 		ARTILLERY("Artillery Shell");				//artillery shells
 		
