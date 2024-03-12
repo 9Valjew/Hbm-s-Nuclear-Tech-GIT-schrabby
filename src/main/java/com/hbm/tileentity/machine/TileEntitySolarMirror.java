@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.tileentity.TileEntityTickingBase;
+import com.hbm.config.MachineConfig;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,6 +49,7 @@ public class TileEntitySolarMirror extends TileEntityTickingBase {
 			
 			if(te instanceof TileEntitySolarBoiler) {
 				TileEntitySolarBoiler boiler = (TileEntitySolarBoiler)te;
+				sun = sun * MachineConfig.herbertMirrorScale;
 				boiler.heat += sun;
 			}
 		} else {

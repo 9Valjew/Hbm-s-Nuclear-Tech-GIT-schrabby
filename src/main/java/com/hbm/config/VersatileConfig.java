@@ -40,6 +40,7 @@ public class VersatileConfig {
 		entity.addPotionEffect(eff);
 	}
 
+
 	public static boolean hasPotionSickness(EntityLivingBase entity) {
 		return entity.isPotionActive(HbmPotion.potionsickness);
 	}
