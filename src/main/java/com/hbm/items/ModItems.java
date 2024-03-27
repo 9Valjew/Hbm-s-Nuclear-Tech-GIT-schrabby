@@ -1698,6 +1698,7 @@ public class ModItems {
 	public static Item grenade_mirv;
 	public static Item grenade_breach;
 	public static Item grenade_burst;
+	public static Item grenade_dart;
 
 	public static Item nuclear_waste_pearl;
 
@@ -4315,6 +4316,7 @@ public class ModItems {
 		grenade_mirv = new ItemGrenade(1).setUnlocalizedName("grenade_mirv").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_mirv");
 		grenade_breach = new ItemGrenade(-1).setUnlocalizedName("grenade_breach").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_breach");
 		grenade_burst = new ItemGrenade(1).setUnlocalizedName("grenade_burst").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_burst");
+		grenade_dart = new ItemGrenade(4).setUnlocalizedName("grenade_dart").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":grenade_dart");
 		nuclear_waste_pearl = new ItemGrenade(-1).setUnlocalizedName("nuclear_waste_pearl").setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":nuclear_waste_pearl");
 		
 		weaponized_starblaster_cell = new WeaponizedCell().setUnlocalizedName("weaponized_starblaster_cell").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab).setTextureName(RefStrings.MODID + ":gun_b92_ammo_weaponized");
@@ -7298,6 +7300,7 @@ public class ModItems {
 		GameRegistry.registerItem(grenade_mirv, grenade_mirv.getUnlocalizedName());
 		GameRegistry.registerItem(grenade_breach, grenade_breach.getUnlocalizedName());
 		GameRegistry.registerItem(grenade_burst, grenade_burst.getUnlocalizedName());
+		GameRegistry.registerItem(grenade_dart, grenade_dart.getUnlocalizedName());
 		GameRegistry.registerItem(grenade_pulse, grenade_pulse.getUnlocalizedName());
 		GameRegistry.registerItem(grenade_plasma, grenade_plasma.getUnlocalizedName());
 		GameRegistry.registerItem(grenade_tau, grenade_tau.getUnlocalizedName());

@@ -145,6 +145,7 @@ public class EntityMappings {
 		addEntity(EntityGrenadeSmart.class, "entity_grenade_smart", 250);
 		addEntity(EntityGrenadeMIRV.class, "entity_grenade_mirv", 250);
 		addEntity(EntityGrenadeBreach.class, "entity_grenade_breach", 250);
+		addEntity(EntityGrenadeDart.class, "entity_grenade_dart", 250);
 		addEntity(EntityGrenadeBurst.class, "entity_grenade_burst", 250);
 		addEntity(EntityBurningFOEQ.class, "entity_burning_foeq", 1000);
 		addEntity(EntityGrenadeIFGeneric.class, "entity_grenade_ironshod", 250);
