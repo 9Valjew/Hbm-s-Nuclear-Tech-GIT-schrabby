@@ -1,68 +1,128 @@
 package com.hbm.entity.grenade;
 
-import net.minecraft.util.AxisAlignedBB;
-import com.hbm.explosion.ExplosionLarge;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraft.util.DamageSource;
+import com.hbm.explosion.ExplosionLarge;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class EntityGrenadeDart extends EntityGrenadeBase {
 
     private EntityLivingBase target;
     private EntityLivingBase thrower;
+    private int delayTimer = 10; // 10 ticks
+    private int pauseTimer = 20; // 1 seconds with 20 ticks per second
+    private double posXBeforePause;
+    private double posYBeforePause;
+    private double posZBeforePause;
+    private double motionXBeforePause;
+    private double motionYBeforePause;
+    private double motionZBeforePause;
 
-    public EntityGrenadeDart(World p_i1773_1_) {
-        super(p_i1773_1_);
+    public EntityGrenadeDart(World world) {
+        super(world);
     }
 
-    public EntityGrenadeDart(World p_i1774_1_, EntityLivingBase p_i1774_2_) {
-        super(p_i1774_1_, p_i1774_2_);
-        this.thrower = p_i1774_2_;
+    public EntityGrenadeDart(World world, EntityLivingBase thrower) {
+        super(world, thrower);
+        this.thrower = thrower;
     }
 
-    public EntityGrenadeDart(World p_i1775_1_, double p_i1775_2_, double p_i1775_4_, double p_i1775_6_) {
-        super(p_i1775_1_, p_i1775_2_, p_i1775_4_, p_i1775_6_);
+    public EntityGrenadeDart(World world, double x, double y, double z) {
+        super(world, x, y, z);
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+
+        if (delayTimer > 0) {
+            delayTimer--;
+            return; // Delaying the tracking and exploding logic
+        }
+
+        if (pauseTimer > 0) {
+            pauseTimer--;
+            posXBeforePause = posX;
+            posYBeforePause = posY;
+            posZBeforePause = posZ;
+            motionXBeforePause = motionX;
+            motionYBeforePause = motionY;
+            motionZBeforePause = motionZ;
+            motionX = 0;
+            motionY = 0.1; // Counteract gravity during the pause
+            motionZ = 0;
+            if (pauseTimer == 0) {
+                setMotionTowardsTarget();
+            }
+            return; // Pausing mid-air after finding the target
+        }
+
+        if (!worldObj.isRemote) {
+            // If there is no target or the target is dead, find a new target
+            if (target == null || target.isDead) {
+                findNewTarget();
+            }
+
+            if (target != null) {
+                double deltaX = target.posX - posX;
+                double deltaY = target.posY - posY;
+                double deltaZ = target.posZ - posZ;
+                double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+
+                if (distance <= 30) { // Maximum range is 30
+                    double speed = 1.0; // Adjust the speed as needed
+                    motionX = deltaX / distance * speed;
+                    motionY = deltaY / distance * speed;
+                    motionZ = deltaZ / distance * speed;
+                } else {
+                    explode();
+                }
+            } else {
+                // If no valid target found, explode
+                explode();
+            }
+        }
+    }
+
+    private void findNewTarget() {
+        List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class,
+                AxisAlignedBB.getBoundingBox(posX - 30, posY - 30, posZ - 30, posX + 30, posY + 30, posZ + 30)); // Maximum range is 30
+
+        // Sort entities by distance to grenade
+        entities.sort(Comparator.comparingDouble(entity -> entity.getDistanceSqToEntity(this)));
+
+        // Find the closest living entity that is not the thrower
+        for (EntityLivingBase entity : entities) {
+            if (!entity.equals(thrower)) {
+                target = entity;
+                pauseTimer = 40; // Reset the pause timer
+                return;
+            }
+        }
+
+        // If no valid target found, set target to null
+        target = null;
+    }
+
+    private void setMotionTowardsTarget() {
+        if (target != null) {
+            posX = posXBeforePause;
+            posY = posYBeforePause;
+            posZ = posZBeforePause;
+            motionX = motionXBeforePause;
+            motionY = motionYBeforePause;
+            motionZ = motionZBeforePause;
+        }
     }
 
     @Override
     public void explode() {
-
-        this.motionX = 0;
-        this.motionY = 0;
-        this.motionZ = 0;
-        /*
-        try
-        {
-            Thread.sleep(5000);
-        }
-        catch(InterruptedException ex)
-        {
-            Thread.currentThread().interrupt();
-        }*/
-        if (!this.worldObj.isRemote) {
-            if (this.target == null) {
-                this.motionX = 0;
-                this.motionY = 0;
-                this.motionZ = 0;
-
-                List<EntityLivingBase> entities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(
-                        this.posX - 50, this.posY - 50, this.posZ - 50,
-                        this.posX + 50, this.posY + 50, this.posZ + 50
-                ));
-                entities.removeIf(entity -> entity.equals(this) || entity.equals(this.thrower));
-
-                if (!entities.isEmpty()) {
-                    this.target = entities.get(0);
-                    this.setThrowableHeading(this.target.posX - this.posX, this.target.posY - this.posY, this.target.posZ - this.posZ, 8.0F, 0.0F);
-                }
-
-            } else {
-                // Adjust the arguments to match the correct method in ExplosionLarge class
-                ExplosionLarge.explode(worldObj, posX, posY, posZ, 2.5F, false, false, false);
-                this.setDead();
-            }
+        if (!worldObj.isRemote) {
+            ExplosionLarge.explode(worldObj, posX, posY, posZ, 1F, false, false, true);
+            setDead();
         }
     }
 }
